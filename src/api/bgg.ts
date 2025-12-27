@@ -3,15 +3,27 @@ import type { BoardGame, BoardGameSearchResult, HotGame } from '../types/boardga
 
 const BGG_API_BASE = 'https://boardgamegeek.com/xmlapi2';
 
-// CORS proxy - BGG doesn't allow direct browser requests
-const CORS_PROXY = 'https://corsproxy.io/?';
+// CORS proxies - BGG doesn't allow direct browser requests
+const CORS_PROXIES = [
+  'https://api.allorigins.win/raw?url=',
+  'https://corsproxy.io/?',
+];
 
 async function fetchWithProxy(url: string): Promise<string> {
-  const response = await fetch(CORS_PROXY + encodeURIComponent(url));
-  if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`);
+  let lastError: Error | null = null;
+
+  for (const proxy of CORS_PROXIES) {
+    try {
+      const response = await fetch(proxy + encodeURIComponent(url));
+      if (response.ok) {
+        return response.text();
+      }
+    } catch (err) {
+      lastError = err instanceof Error ? err : new Error(String(err));
+    }
   }
-  return response.text();
+
+  throw lastError || new Error('Minden CORS proxy sikertelen');
 }
 
 // Parse XML to JSON
