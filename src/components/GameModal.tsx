@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { X, Star, Users, Clock, Brain, Calendar, Check, Plus, ExternalLink } from 'lucide-react';
 import type { BoardGame } from '../types/boardgame';
 import { useWatchlist } from '../hooks/useWatchlist';
+import { useI18n } from '../i18n';
 import './GameModal.css';
 
 interface GameModalProps {
@@ -11,6 +12,7 @@ interface GameModalProps {
 
 export const GameModal = ({ game, onClose }: GameModalProps) => {
   const { addItem, removeItem, isInWatchlist } = useWatchlist();
+  const { t } = useI18n();
   const inWatchlist = isInWatchlist(game.id);
 
   useEffect(() => {
@@ -30,13 +32,13 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
 
   const playersText =
     game.minPlayers === game.maxPlayers
-      ? `${game.minPlayers} játékos`
-      : `${game.minPlayers}-${game.maxPlayers} játékos`;
+      ? `${game.minPlayers} ${t('player')}`
+      : `${game.minPlayers}-${game.maxPlayers} ${t('playerPlural')}`;
 
   const playTimeText =
     game.minPlayTime === game.maxPlayTime || !game.minPlayTime
-      ? `${game.playingTime} perc`
-      : `${game.minPlayTime}-${game.maxPlayTime} perc`;
+      ? `${game.playingTime} ${t('minute')}`
+      : `${game.minPlayTime}-${game.maxPlayTime} ${t('minute')}`;
 
   // Decode HTML entities in description
   const decodeHTML = (html: string) => {
@@ -80,11 +82,11 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
               >
                 {inWatchlist ? (
                   <>
-                    <Check size={16} /> Kívánságlistán
+                    <Check size={16} /> {t('onWatchlist')}
                   </>
                 ) : (
                   <>
-                    <Plus size={16} /> Kívánságlistához
+                    <Plus size={16} /> {t('addToWatchlist')}
                   </>
                 )}
               </button>
@@ -108,10 +110,10 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
               </span>
               <span className="modal-rating">
                 <Star size={16} fill="currentColor" /> {game.rating.toFixed(1)}
-                <small>({game.usersRated.toLocaleString()} értékelés)</small>
+                <small>({game.usersRated.toLocaleString()} {t('ratings')})</small>
               </span>
               {game.rank > 0 && (
-                <span className="modal-rank">#{game.rank} a rangsorban</span>
+                <span className="modal-rank">#{game.rank} {t('inRanking')}</span>
               )}
             </div>
 
@@ -120,28 +122,28 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
                 <Users size={20} />
                 <div>
                   <strong>{playersText}</strong>
-                  <small>Játékosok</small>
+                  <small>{t('playersLabel')}</small>
                 </div>
               </div>
               <div className="modal-stat">
                 <Clock size={20} />
                 <div>
                   <strong>{playTimeText}</strong>
-                  <small>Játékidő</small>
+                  <small>{t('playTimeLabel')}</small>
                 </div>
               </div>
               <div className="modal-stat">
                 <Brain size={20} />
                 <div>
                   <strong>{game.complexity.toFixed(2)} / 5</strong>
-                  <small>Komplexitás</small>
+                  <small>{t('complexityLabel')}</small>
                 </div>
               </div>
             </div>
 
             {game.categories.length > 0 && (
               <div className="modal-tags">
-                <h4>Kategóriák</h4>
+                <h4>{t('categories')}</h4>
                 <div className="modal-tag-list">
                   {game.categories.slice(0, 8).map((cat) => (
                     <span key={cat} className="modal-tag">
@@ -154,7 +156,7 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
 
             {game.mechanics.length > 0 && (
               <div className="modal-tags">
-                <h4>Mechanikák</h4>
+                <h4>{t('mechanics')}</h4>
                 <div className="modal-tag-list">
                   {game.mechanics.slice(0, 8).map((mech) => (
                     <span key={mech} className="modal-tag">
@@ -167,14 +169,14 @@ export const GameModal = ({ game, onClose }: GameModalProps) => {
 
             {game.designers.length > 0 && (
               <div className="modal-section">
-                <h4>Tervező(k)</h4>
+                <h4>{t('designers')}</h4>
                 <p>{game.designers.slice(0, 5).join(', ')}</p>
               </div>
             )}
 
             {game.description && (
               <div className="modal-description">
-                <h4>Leírás</h4>
+                <h4>{t('description')}</h4>
                 <p>{decodeHTML(game.description)}</p>
               </div>
             )}

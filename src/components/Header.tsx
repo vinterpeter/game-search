@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import { Dice5, X, Search, BookmarkCheck } from 'lucide-react';
+import { useI18n } from '../i18n';
+import { LanguageSelector } from './LanguageSelector';
 import './Header.css';
 
 interface HeaderProps {
@@ -14,6 +16,7 @@ export const Header = ({
   watchlistCount,
 }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState('');
+  const { t } = useI18n();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,7 +34,7 @@ export const Header = ({
         {/* Logo */}
         <div className="header__brand">
           <Dice5 size={24} />
-          <span className="header__title">Társas Kereső</span>
+          <span className="header__title">{t('appTitle')}</span>
         </div>
 
         {/* Search */}
@@ -40,7 +43,7 @@ export const Header = ({
             <Search size={16} className="header__search-icon" />
             <input
               type="text"
-              placeholder="Társasjáték keresése..."
+              placeholder={t('searchPlaceholder')}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="header__search-input"
@@ -57,14 +60,19 @@ export const Header = ({
           </div>
         </form>
 
-        {/* Watchlist */}
-        <button className="header__watchlist-btn" onClick={onWatchlistClick}>
-          <BookmarkCheck size={18} />
-          <span className="header__watchlist-text">Kívánságlista</span>
-          {watchlistCount > 0 && (
-            <span className="header__watchlist-count">{watchlistCount}</span>
-          )}
-        </button>
+        {/* Right side actions */}
+        <div className="header__actions">
+          <LanguageSelector />
+
+          {/* Watchlist */}
+          <button className="header__watchlist-btn" onClick={onWatchlistClick}>
+            <BookmarkCheck size={18} />
+            <span className="header__watchlist-text">{t('watchlist')}</span>
+            {watchlistCount > 0 && (
+              <span className="header__watchlist-count">{watchlistCount}</span>
+            )}
+          </button>
+        </div>
       </div>
     </header>
   );

@@ -1,10 +1,12 @@
-# Társas Kereső
+# Társas Kereső / Board Game Search
 
-> **Verzió: 1.0.0**
+> **Verzió: 1.1.0**
 >
 > **Weboldal: https://vinterpeter.github.io/game-search/**
 
-Magyar nyelvű webalkalmazás társasjátékok kereséséhez, szűréséhez és kívánságlista kezeléssel. A BoardGameGeek API-t használja.
+Többnyelvű webalkalmazás társasjátékok kereséséhez, szűréséhez és kívánságlista kezeléssel. A BoardGameGeek API-t használja.
+
+Multilingual web application for searching, filtering board games and managing a watchlist. Uses the BoardGameGeek API.
 
 ## Funkciók
 
@@ -26,6 +28,10 @@ Magyar nyelvű webalkalmazás társasjátékok kereséséhez, szűréséhez és 
   - Tervezők
   - BGG link
 - **Reszponzív design**: Mobil és desktop nézet támogatás
+- **Többnyelvűség**: Magyar és angol nyelv támogatás
+  - Automatikus nyelvfelismerés (böngésző nyelv alapján)
+  - Nyelvválasztó a fejlécben
+  - Beállítás mentése helyi tárolásba
 
 ## Technológiák
 
@@ -72,27 +78,43 @@ npm run preview
 ```
 src/
 ├── api/
-│   └── bgg.ts               # BoardGameGeek API integráció
+│   └── bgg.ts                    # BoardGameGeek API integráció
 ├── components/
-│   ├── Header.tsx/.css      # Fejléc (kereső, kívánságlista gomb)
-│   ├── GameCard.tsx/.css    # Játék kártya
-│   ├── GameGrid.tsx/.css    # Kártyák rácsos elrendezése
-│   ├── GameModal.tsx/.css   # Részletes nézet modal
-│   ├── FilterPanel.tsx/.css # Szűrő panel
-│   └── Watchlist.tsx/.css   # Kívánságlista panel
+│   ├── Header.tsx/.css           # Fejléc (kereső, kívánságlista, nyelvválasztó)
+│   ├── GameCard.tsx/.css         # Játék kártya
+│   ├── GameGrid.tsx/.css         # Kártyák rácsos elrendezése
+│   ├── GameModal.tsx/.css        # Részletes nézet modal
+│   ├── FilterPanel.tsx/.css      # Szűrő panel
+│   ├── Watchlist.tsx/.css        # Kívánságlista panel
+│   ├── LanguageSelector.tsx/.css # Nyelvválasztó
+│   └── TokenSetup.tsx/.css       # API token beállítás
 ├── hooks/
-│   ├── useGames.ts          # Játék adatok kezelése, szűrés, rendezés
-│   └── useWatchlist.ts      # Kívánságlista hook
+│   ├── useGames.ts               # Játék adatok kezelése, szűrés, rendezés
+│   └── useWatchlist.ts           # Kívánságlista hook
+├── i18n/
+│   ├── index.tsx                 # I18n provider és hook
+│   └── translations/
+│       ├── hu.ts                 # Magyar fordítások
+│       └── en.ts                 # Angol fordítások
 ├── types/
-│   └── boardgame.ts         # TypeScript típusok
-├── App.tsx                  # Fő alkalmazás komponens
+│   └── boardgame.ts              # TypeScript típusok
+├── App.tsx                       # Fő alkalmazás komponens
 ├── App.css
-└── index.css                # Globális stílusok
+└── index.css                     # Globális stílusok
 ```
 
 ---
 
 ## Változásnapló
+
+### v1.1.0 (2025-12)
+- Többnyelvű támogatás (magyar és angol)
+- Nyelvválasztó komponens a fejlécben
+- Automatikus nyelvfelismerés böngésző nyelv alapján
+- Nyelvi beállítás mentése LocalStorage-ba
+- Token beállító komponens lokalizációja
+- Korosztály szűrő (6+, 8+, 10+, 12+, 14+, 18+)
+- További rendezési opciók (játékosszám, játékidő)
 
 ### v1.0.0 (2025-12)
 - Kezdeti kiadás

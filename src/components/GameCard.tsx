@@ -1,5 +1,6 @@
 import { Star, Users, Clock, Brain } from 'lucide-react';
 import type { BoardGame } from '../types/boardgame';
+import { useI18n } from '../i18n';
 import './GameCard.css';
 
 interface GameCardProps {
@@ -8,6 +9,7 @@ interface GameCardProps {
 }
 
 export const GameCard = ({ game, onClick }: GameCardProps) => {
+  const { t } = useI18n();
   const rating = game.rating ? game.rating.toFixed(1) : 'N/A';
   const complexity = game.complexity ? game.complexity.toFixed(1) : '-';
 
@@ -39,13 +41,13 @@ export const GameCard = ({ game, onClick }: GameCardProps) => {
         <h3 className="game-card__title">{game.name}</h3>
         <p className="game-card__year">{game.yearPublished || 'N/A'}</p>
         <div className="game-card__stats">
-          <span className="game-card__stat" title="Játékosok">
+          <span className="game-card__stat" title={t('players')}>
             <Users size={12} /> {playersText}
           </span>
-          <span className="game-card__stat" title="Játékidő">
+          <span className="game-card__stat" title={t('playTimeLabel')}>
             <Clock size={12} /> {game.playingTime}'
           </span>
-          <span className="game-card__stat" title="Komplexitás">
+          <span className="game-card__stat" title={t('complexityLabel')}>
             <Brain size={12} /> {complexity}
           </span>
         </div>

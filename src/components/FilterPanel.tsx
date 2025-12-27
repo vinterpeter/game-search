@@ -1,4 +1,5 @@
 import type { FilterOptions, SortOption } from '../types/boardgame';
+import { useI18n } from '../i18n';
 import './FilterPanel.css';
 
 interface FilterPanelProps {
@@ -18,20 +19,6 @@ const PLAYER_OPTIONS = [
   { value: 6, label: '6+' },
 ];
 
-const PLAYTIME_OPTIONS = [
-  { min: 0, max: 30, label: '30 perc alatt' },
-  { min: 30, max: 60, label: '30-60 perc' },
-  { min: 60, max: 120, label: '1-2 óra' },
-  { min: 120, max: 9999, label: '2+ óra' },
-];
-
-const COMPLEXITY_OPTIONS = [
-  { min: 1, max: 2, label: 'Könnyű (1-2)' },
-  { min: 2, max: 3, label: 'Közepes (2-3)' },
-  { min: 3, max: 4, label: 'Nehéz (3-4)' },
-  { min: 4, max: 5, label: 'Nagyon nehéz (4-5)' },
-];
-
 const AGE_OPTIONS = [
   { value: 6, label: '6+' },
   { value: 8, label: '8+' },
@@ -48,6 +35,22 @@ export const FilterPanel = ({
   onSortChange,
   onClear,
 }: FilterPanelProps) => {
+  const { t } = useI18n();
+
+  const PLAYTIME_OPTIONS = [
+    { min: 0, max: 30, labelKey: 'under30min' as const },
+    { min: 30, max: 60, labelKey: '30to60min' as const },
+    { min: 60, max: 120, labelKey: '1to2hours' as const },
+    { min: 120, max: 9999, labelKey: 'over2hours' as const },
+  ];
+
+  const COMPLEXITY_OPTIONS = [
+    { min: 1, max: 2, labelKey: 'easy' as const },
+    { min: 2, max: 3, labelKey: 'medium' as const },
+    { min: 3, max: 4, labelKey: 'hard' as const },
+    { min: 4, max: 5, labelKey: 'veryHard' as const },
+  ];
+
   const handlePlayerChange = (players: number | undefined) => {
     onFiltersChange({
       ...filters,
@@ -96,38 +99,38 @@ export const FilterPanel = ({
   return (
     <aside className="filter-panel">
       <div className="filter-panel__header">
-        <h2>Szűrők</h2>
+        <h2>{t('filters')}</h2>
         {hasActiveFilters && (
           <button className="filter-panel__clear" onClick={onClear}>
-            Törlés
+            {t('clear')}
           </button>
         )}
       </div>
 
-      {/* Rendezés */}
+      {/* Sort */}
       <div className="filter-section">
-        <h3>Rendezés</h3>
+        <h3>{t('sort')}</h3>
         <select
           className="filter-select"
           value={sortBy}
           onChange={(e) => onSortChange(e.target.value as SortOption)}
         >
-          <option value="rank">Rangsor</option>
-          <option value="rating">Értékelés</option>
-          <option value="complexity_desc">Komplexitás (nehéz először)</option>
-          <option value="complexity_asc">Komplexitás (könnyű először)</option>
-          <option value="name">Név</option>
-          <option value="year">Kiadás éve</option>
-          <option value="players_desc">Játékosszám (sok először)</option>
-          <option value="players_asc">Játékosszám (kevés először)</option>
-          <option value="playtime_desc">Játékidő (hosszú először)</option>
-          <option value="playtime_asc">Játékidő (rövid először)</option>
+          <option value="rank">{t('sortByRank')}</option>
+          <option value="rating">{t('sortByRating')}</option>
+          <option value="complexity_desc">{t('sortByComplexityDesc')}</option>
+          <option value="complexity_asc">{t('sortByComplexityAsc')}</option>
+          <option value="name">{t('sortByName')}</option>
+          <option value="year">{t('sortByYear')}</option>
+          <option value="players_desc">{t('sortByPlayersDesc')}</option>
+          <option value="players_asc">{t('sortByPlayersAsc')}</option>
+          <option value="playtime_desc">{t('sortByPlaytimeDesc')}</option>
+          <option value="playtime_asc">{t('sortByPlaytimeAsc')}</option>
         </select>
       </div>
 
-      {/* Játékosszám */}
+      {/* Player count */}
       <div className="filter-section">
-        <h3>Játékosszám</h3>
+        <h3>{t('playerCount')}</h3>
         <div className="filter-chips">
           {PLAYER_OPTIONS.map((opt) => (
             <button
@@ -145,13 +148,13 @@ export const FilterPanel = ({
         </div>
       </div>
 
-      {/* Játékidő */}
+      {/* Play time */}
       <div className="filter-section">
-        <h3>Játékidő</h3>
+        <h3>{t('playTime')}</h3>
         <div className="filter-chips">
           {PLAYTIME_OPTIONS.map((opt) => (
             <button
-              key={opt.label}
+              key={opt.labelKey}
               className={`filter-chip ${
                 filters.minPlayTime === opt.min && filters.maxPlayTime === opt.max
                   ? 'active'
@@ -165,19 +168,19 @@ export const FilterPanel = ({
                 }
               }}
             >
-              {opt.label}
+              {t(opt.labelKey)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Komplexitás */}
+      {/* Complexity */}
       <div className="filter-section">
-        <h3>Komplexitás</h3>
+        <h3>{t('complexity')}</h3>
         <div className="filter-chips">
           {COMPLEXITY_OPTIONS.map((opt) => (
             <button
-              key={opt.label}
+              key={opt.labelKey}
               className={`filter-chip ${
                 filters.minComplexity === opt.min && filters.maxComplexity === opt.max
                   ? 'active'
@@ -191,15 +194,15 @@ export const FilterPanel = ({
                 }
               }}
             >
-              {opt.label}
+              {t(opt.labelKey)}
             </button>
           ))}
         </div>
       </div>
 
-      {/* Minimum értékelés */}
+      {/* Min rating */}
       <div className="filter-section">
-        <h3>Minimum értékelés</h3>
+        <h3>{t('minRating')}</h3>
         <div className="filter-chips">
           {[7, 7.5, 8, 8.5].map((rating) => (
             <button
@@ -215,9 +218,9 @@ export const FilterPanel = ({
         </div>
       </div>
 
-      {/* Korosztály */}
+      {/* Age group */}
       <div className="filter-section">
-        <h3>Korosztály</h3>
+        <h3>{t('ageGroup')}</h3>
         <div className="filter-chips">
           {AGE_OPTIONS.map((opt) => (
             <button

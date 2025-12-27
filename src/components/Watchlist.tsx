@@ -1,6 +1,7 @@
 import { X, ExternalLink, Trash2, Package, Gamepad2 } from 'lucide-react';
 import type { WatchlistItem } from '../types/boardgame';
 import { useWatchlist } from '../hooks/useWatchlist';
+import { useI18n } from '../i18n';
 import './Watchlist.css';
 
 interface WatchlistProps {
@@ -10,6 +11,7 @@ interface WatchlistProps {
 
 export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
   const { items, removeItem, toggleOwned, toggleWantToPlay } = useWatchlist();
+  const { t } = useI18n();
 
   if (!isOpen) return null;
 
@@ -17,7 +19,7 @@ export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
     <div className="watchlist-overlay" onClick={onClose}>
       <div className="watchlist-panel" onClick={(e) => e.stopPropagation()}>
         <div className="watchlist-header">
-          <h2>Kívánságlista</h2>
+          <h2>{t('watchlistTitle')}</h2>
           <button className="watchlist-close" onClick={onClose}>
             <X size={24} />
           </button>
@@ -26,8 +28,8 @@ export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
         {items.length === 0 ? (
           <div className="watchlist-empty">
             <Gamepad2 size={48} />
-            <p>A kívánságlistád üres</p>
-            <small>Adj hozzá játékokat a böngészés során!</small>
+            <p>{t('emptyWatchlist')}</p>
+            <small>{t('addGamesWhileBrowsing')}</small>
           </div>
         ) : (
           <div className="watchlist-items">
@@ -53,14 +55,14 @@ export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
                   <button
                     className={`btn-owned ${item.owned ? 'active' : ''}`}
                     onClick={() => toggleOwned(item.id)}
-                    title={item.owned ? 'Megvan' : 'Megjelölés: megvan'}
+                    title={item.owned ? t('owned') : t('markAsOwned')}
                   >
                     <Package size={18} />
                   </button>
                   <button
                     className={`btn-want-to-play ${item.wantToPlay ? 'active' : ''}`}
                     onClick={() => toggleWantToPlay(item.id)}
-                    title={item.wantToPlay ? 'Játszani akarok vele' : 'Megjelölés: játszani akarok'}
+                    title={item.wantToPlay ? t('wantToPlay') : t('markAsWantToPlay')}
                   >
                     <Gamepad2 size={18} />
                   </button>
@@ -69,14 +71,14 @@ export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
                     target="_blank"
                     rel="noopener noreferrer"
                     className="btn-bgg"
-                    title="Megnyitás BGG-n"
+                    title={t('openOnBgg')}
                   >
                     <ExternalLink size={18} />
                   </a>
                   <button
                     className="btn-remove"
                     onClick={() => removeItem(item.id)}
-                    title="Eltávolítás"
+                    title={t('remove')}
                   >
                     <Trash2 size={18} />
                   </button>
@@ -88,10 +90,10 @@ export const Watchlist = ({ isOpen, onClose }: WatchlistProps) => {
 
         {items.length > 0 && (
           <div className="watchlist-footer">
-            <span>{items.length} játék a listán</span>
+            <span>{items.length} {t('gamesOnList')}</span>
             <span>
-              {items.filter((i) => i.owned).length} megvan •{' '}
-              {items.filter((i) => i.wantToPlay).length} játszani akarok
+              {items.filter((i) => i.owned).length} {t('iOwn')} •{' '}
+              {items.filter((i) => i.wantToPlay).length} {t('iWantToPlay')}
             </span>
           </div>
         )}

@@ -1,6 +1,7 @@
 import { Loader2 } from 'lucide-react';
 import type { BoardGame } from '../types/boardgame';
 import { GameCard } from './GameCard';
+import { useI18n } from '../i18n';
 import './GameGrid.css';
 
 interface GameGridProps {
@@ -20,11 +21,13 @@ export const GameGrid = ({
   onLoadMore,
   hasMore,
 }: GameGridProps) => {
+  const { t } = useI18n();
+
   if (loading && games.length === 0) {
     return (
       <div className="game-grid__loading">
         <Loader2 size={40} className="spin" />
-        <p>Játékok betöltése...</p>
+        <p>{t('loadingGames')}</p>
       </div>
     );
   }
@@ -32,7 +35,7 @@ export const GameGrid = ({
   if (error) {
     return (
       <div className="game-grid__error">
-        <p>Hiba: {error}</p>
+        <p>{t('error')}: {error}</p>
       </div>
     );
   }
@@ -40,8 +43,8 @@ export const GameGrid = ({
   if (games.length === 0) {
     return (
       <div className="game-grid__empty">
-        <p>Nem találtunk játékokat.</p>
-        <p>Próbálj más keresési feltételeket!</p>
+        <p>{t('noGamesFound')}</p>
+        <p>{t('tryDifferentFilters')}</p>
       </div>
     );
   }
@@ -62,10 +65,10 @@ export const GameGrid = ({
         >
           {loading ? (
             <>
-              <Loader2 size={16} className="spin" /> Betöltés...
+              <Loader2 size={16} className="spin" /> {t('loading')}
             </>
           ) : (
-            'Továbbiak betöltése'
+            t('loadMore')
           )}
         </button>
       )}
