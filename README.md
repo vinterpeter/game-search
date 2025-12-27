@@ -1,6 +1,8 @@
 # Társas Kereső
 
 > **Verzió: 1.0.0**
+>
+> **Weboldal: https://vinterpeter.github.io/game-search/**
 
 Magyar nyelvű webalkalmazás társasjátékok kereséséhez, szűréséhez és kívánságlista kezeléssel. A BoardGameGeek API-t használja.
 
