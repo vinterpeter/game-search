@@ -1,0 +1,154 @@
+.header {
+  background: linear-gradient(135deg, #059669, #047857);
+  padding: 12px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.header__content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Logo */
+.header__brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.header__title {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Search */
+.header__search {
+  flex: 1;
+  max-width: 500px;
+  min-width: 150px;
+}
+
+.header__search-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.header__search-icon {
+  position: absolute;
+  left: 12px;
+  color: #6b7280;
+  pointer-events: none;
+}
+
+.header__search-input {
+  width: 100%;
+  padding: 10px 36px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #1f2937;
+}
+
+.header__search-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.header__search-input::placeholder {
+  color: #6b7280;
+}
+
+.header__search-clear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.header__search-clear:hover {
+  color: #374151;
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Watchlist button */
+.header__watchlist-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(255, 255, 255, 0.15);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+
+.header__watchlist-btn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.header__watchlist-count {
+  background: #dc2626;
+  color: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  min-width: 20px;
+  text-align: center;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .header {
+    padding: 10px 16px;
+  }
+
+  .header__content {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .header__brand {
+    order: 1;
+  }
+
+  .header__watchlist-btn {
+    order: 2;
+    margin-left: auto;
+  }
+
+  .header__search {
+    order: 3;
+    flex: 1 1 100%;
+    max-width: none;
+  }
+
+  .header__title {
+    font-size: 1.1rem;
+  }
+
+  .header__watchlist-text {
+    display: none;
+  }
+}
