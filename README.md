@@ -44,6 +44,15 @@ Magyar nyelvű webalkalmazás társasjátékok kereséséhez, szűréséhez és 
   - Játék keresés
   - Részletes játék információk
 
+## BGG API Token
+
+A BoardGameGeek 2025-től API authentikációt igényel. Token beszerzése:
+
+1. Lépj be a [BGG](https://boardgamegeek.com) fiókodba
+2. Menj a [BGG XML API2 dokumentációhoz](https://boardgamegeek.com/wiki/page/BGG_XML_API2)
+3. Kövesd az utasításokat a token beszerzéséhez
+4. Add meg a tokent az alkalmazásban
+
 ## Telepítés
 
 ```bash

@@ -106,6 +106,18 @@ export function useGames({ filters, sortBy = 'rank', searchQuery }: UseGamesOpti
       if (filters.minRating !== undefined) {
         filtered = filtered.filter((g) => g.rating >= filters.minRating!);
       }
+      if (filters.minAge !== undefined) {
+        filtered = filtered.filter((g) => g.minAge >= filters.minAge!);
+      }
+      if (filters.maxAge !== undefined) {
+        filtered = filtered.filter((g) => g.minAge <= filters.maxAge!);
+      }
+      if (filters.minYear !== undefined) {
+        filtered = filtered.filter((g) => g.yearPublished >= filters.minYear!);
+      }
+      if (filters.maxYear !== undefined) {
+        filtered = filtered.filter((g) => g.yearPublished <= filters.maxYear!);
+      }
       if (filters.categories && filters.categories.length > 0) {
         filtered = filtered.filter((g) =>
           filters.categories!.some((c) => g.categories.includes(c))
@@ -114,6 +126,11 @@ export function useGames({ filters, sortBy = 'rank', searchQuery }: UseGamesOpti
       if (filters.mechanics && filters.mechanics.length > 0) {
         filtered = filtered.filter((g) =>
           filters.mechanics!.some((m) => g.mechanics.includes(m))
+        );
+      }
+      if (filters.designers && filters.designers.length > 0) {
+        filtered = filtered.filter((g) =>
+          filters.designers!.some((d) => g.designers.includes(d))
         );
       }
     }
@@ -137,6 +154,18 @@ export function useGames({ filters, sortBy = 'rank', searchQuery }: UseGamesOpti
         break;
       case 'year':
         filtered.sort((a, b) => b.yearPublished - a.yearPublished);
+        break;
+      case 'players_asc':
+        filtered.sort((a, b) => a.minPlayers - b.minPlayers);
+        break;
+      case 'players_desc':
+        filtered.sort((a, b) => b.maxPlayers - a.maxPlayers);
+        break;
+      case 'playtime_asc':
+        filtered.sort((a, b) => a.playingTime - b.playingTime);
+        break;
+      case 'playtime_desc':
+        filtered.sort((a, b) => b.playingTime - a.playingTime);
         break;
     }
 

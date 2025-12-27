@@ -59,8 +59,13 @@ export interface FilterOptions {
   minComplexity?: number;
   maxComplexity?: number;
   minRating?: number;
+  minAge?: number;
+  maxAge?: number;
+  minYear?: number;
+  maxYear?: number;
   categories?: string[];
   mechanics?: string[];
+  designers?: string[];
 }
 
 export type SortOption =
@@ -69,4 +74,65 @@ export type SortOption =
   | 'complexity_asc'
   | 'complexity_desc'
   | 'name'
-  | 'year';
+  | 'year'
+  | 'players_asc'
+  | 'players_desc'
+  | 'playtime_asc'
+  | 'playtime_desc';
+
+// User collection types
+export interface CollectionItem {
+  id: number;
+  name: string;
+  thumbnail: string;
+  yearPublished: number;
+  minPlayers: number;
+  maxPlayers: number;
+  playingTime: number;
+  rating: number;
+  owned: boolean;
+  prevOwned: boolean;
+  forTrade: boolean;
+  want: boolean;
+  wantToPlay: boolean;
+  wantToBuy: boolean;
+  wishlist: boolean;
+  wishlistPriority: number;
+  preordered: boolean;
+  numPlays: number;
+  personalRating: number;
+  comment: string;
+}
+
+// Play history types
+export interface PlayRecord {
+  id: number;
+  date: string;
+  quantity: number;
+  length: number;
+  incomplete: boolean;
+  location: string;
+  gameId: number;
+  gameName: string;
+  comments: string;
+  players: PlayPlayer[];
+}
+
+export interface PlayPlayer {
+  username: string;
+  name: string;
+  score: string;
+  new: boolean;
+  win: boolean;
+}
+
+// Hot list types
+export type HotListType =
+  | 'boardgame'
+  | 'boardgamecompany'
+  | 'boardgameperson'
+  | 'rpg'
+  | 'rpgcompany'
+  | 'rpgperson'
+  | 'videogame'
+  | 'videogamecompany';

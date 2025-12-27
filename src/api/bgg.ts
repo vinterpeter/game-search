@@ -2,27 +2,42 @@ import type { BoardGame, BoardGameSearchResult, HotGame } from '../types/boardga
 
 const BGG_API_BASE = 'https://boardgamegeek.com/xmlapi2';
 
-// CORS proxies - BGG doesn't allow direct browser requests
-const CORS_PROXIES = [
-  'https://api.allorigins.win/raw?url=',
-  'https://corsproxy.io/?',
-];
+// BGG API token - get yours at https://boardgamegeek.com/applications
+// Store in localStorage or environment variable
+function getBggToken(): string | null {
+  return localStorage.getItem('bgg_api_token');
+}
 
-async function fetchWithProxy(url: string): Promise<string> {
-  let lastError: Error | null = null;
+export function setBggToken(token: string): void {
+  localStorage.setItem('bgg_api_token', token);
+}
 
-  for (const proxy of CORS_PROXIES) {
-    try {
-      const response = await fetch(proxy + encodeURIComponent(url));
-      if (response.ok) {
-        return response.text();
-      }
-    } catch (err) {
-      lastError = err instanceof Error ? err : new Error(String(err));
-    }
+export function hasBggToken(): boolean {
+  return !!getBggToken();
+}
+
+async function fetchBgg(url: string): Promise<string> {
+  const token = getBggToken();
+
+  if (!token) {
+    throw new Error('BGG API token szükséges. Kérlek add meg a beállításokban.');
   }
 
-  throw lastError || new Error('Minden CORS proxy sikertelen');
+  const response = await fetch(url, {
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  if (response.status === 401) {
+    throw new Error('Érvénytelen BGG API token. Kérlek ellenőrizd a beállításokban.');
+  }
+
+  if (!response.ok) {
+    throw new Error(`BGG API hiba: ${response.status}`);
+  }
+
+  return response.text();
 }
 
 // Parse XML using native browser DOMParser
@@ -49,7 +64,7 @@ function getChildren(el: Element | null, tagName: string): Element[] {
 
 // Get hot/trending games
 export async function getHotGames(): Promise<HotGame[]> {
-  const xml = await fetchWithProxy(`${BGG_API_BASE}/hot?type=boardgame`);
+  const xml = await fetchBgg(`${BGG_API_BASE}/hot?type=boardgame`);
   const doc = parseXML(xml);
 
   const items = getChildren(doc.documentElement, 'item');
@@ -67,7 +82,7 @@ export async function getHotGames(): Promise<HotGame[]> {
 
 // Search for games
 export async function searchGames(query: string): Promise<BoardGameSearchResult[]> {
-  const xml = await fetchWithProxy(
+  const xml = await fetchBgg(
     `${BGG_API_BASE}/search?query=${encodeURIComponent(query)}&type=boardgame`
   );
   const doc = parseXML(xml);
@@ -85,7 +100,7 @@ export async function searchGames(query: string): Promise<BoardGameSearchResult[
 
 // Get detailed game info
 export async function getGameDetails(id: number): Promise<BoardGame | null> {
-  const xml = await fetchWithProxy(`${BGG_API_BASE}/thing?id=${id}&stats=1`);
+  const xml = await fetchBgg(`${BGG_API_BASE}/thing?id=${id}&stats=1`);
   const doc = parseXML(xml);
 
   const item = doc.querySelector('item');
@@ -98,11 +113,10 @@ export async function getGameDetails(id: number): Promise<BoardGame | null> {
 export async function getGamesDetails(ids: number[]): Promise<BoardGame[]> {
   if (ids.length === 0) return [];
 
-  const xml = await fetchWithProxy(
+  const xml = await fetchBgg(
     `${BGG_API_BASE}/thing?id=${ids.join(',')}&stats=1`
   );
   const doc = parseXML(xml);
-
   const items = getChildren(doc.documentElement, 'item');
 
   return items.map(parseGameItem);

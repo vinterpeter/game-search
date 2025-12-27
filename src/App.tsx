@@ -4,12 +4,15 @@ import { GameGrid } from './components/GameGrid';
 import { FilterPanel } from './components/FilterPanel';
 import { GameModal } from './components/GameModal';
 import { Watchlist } from './components/Watchlist';
+import { TokenSetup } from './components/TokenSetup';
 import { useGames } from './hooks/useGames';
 import { useWatchlist } from './hooks/useWatchlist';
+import { hasBggToken } from './api/bgg';
 import type { BoardGame, FilterOptions, SortOption } from './types/boardgame';
 import './App.css';
 
 function App() {
+  const [hasToken, setHasToken] = useState(hasBggToken());
   const [searchQuery, setSearchQuery] = useState('');
   const [filters, setFilters] = useState<FilterOptions>({});
   const [sortBy, setSortBy] = useState<SortOption>('rank');
@@ -27,6 +30,19 @@ function App() {
   const handleClearFilters = () => {
     setFilters({});
   };
+
+  if (!hasToken) {
+    return (
+      <div className="app">
+        <Header
+          onSearch={() => {}}
+          onWatchlistClick={() => {}}
+          watchlistCount={0}
+        />
+        <TokenSetup onTokenSet={() => setHasToken(true)} />
+      </div>
+    );
+  }
 
   return (
     <div className="app">

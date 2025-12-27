@@ -32,6 +32,15 @@ const COMPLEXITY_OPTIONS = [
   { min: 4, max: 5, label: 'Nagyon nehéz (4-5)' },
 ];
 
+const AGE_OPTIONS = [
+  { value: 6, label: '6+' },
+  { value: 8, label: '8+' },
+  { value: 10, label: '10+' },
+  { value: 12, label: '12+' },
+  { value: 14, label: '14+' },
+  { value: 18, label: '18+' },
+];
+
 export const FilterPanel = ({
   filters,
   sortBy,
@@ -70,11 +79,19 @@ export const FilterPanel = ({
     });
   };
 
+  const handleAgeChange = (age: number | undefined) => {
+    onFiltersChange({
+      ...filters,
+      minAge: age,
+    });
+  };
+
   const hasActiveFilters =
     filters.minPlayers !== undefined ||
     filters.minPlayTime !== undefined ||
     filters.minComplexity !== undefined ||
-    filters.minRating !== undefined;
+    filters.minRating !== undefined ||
+    filters.minAge !== undefined;
 
   return (
     <aside className="filter-panel">
@@ -101,6 +118,10 @@ export const FilterPanel = ({
           <option value="complexity_asc">Komplexitás (könnyű először)</option>
           <option value="name">Név</option>
           <option value="year">Kiadás éve</option>
+          <option value="players_desc">Játékosszám (sok először)</option>
+          <option value="players_asc">Játékosszám (kevés először)</option>
+          <option value="playtime_desc">Játékidő (hosszú először)</option>
+          <option value="playtime_asc">Játékidő (rövid először)</option>
         </select>
       </div>
 
@@ -189,6 +210,24 @@ export const FilterPanel = ({
               }
             >
               {rating}+
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Korosztály */}
+      <div className="filter-section">
+        <h3>Korosztály</h3>
+        <div className="filter-chips">
+          {AGE_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              className={`filter-chip ${filters.minAge === opt.value ? 'active' : ''}`}
+              onClick={() =>
+                handleAgeChange(filters.minAge === opt.value ? undefined : opt.value)
+              }
+            >
+              {opt.label}
             </button>
           ))}
         </div>
